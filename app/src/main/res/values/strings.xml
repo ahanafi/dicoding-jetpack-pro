@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Catalogue Movie</string>
+    <string name="tab_movie">Movie</string>
+    <string name="tab_tv_show">Tv Show</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="poster_image">Image Poster</string>
+    <string name="movie_title">Move Title</string>
+    <string name="release_date">Release Date</string>
+    <string name="overview">this is ane example of overview text bla bla bla bla bla bla bla bla</string>
+    <string name="overview_text">Overview</string>
+    <string name="text_vote">999</string>
+</resources>
