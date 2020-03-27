@@ -28,6 +28,7 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                 }
 
                 val posterPath = "https://image.tmdb.org/t/p/w185" + movie.posterPath
+
                 Glide.with(context).load(posterPath)
                     .apply(RequestOptions.placeholderOf(R.drawable.img_bg_card))
                     .into(img_item_photo)

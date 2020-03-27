@@ -13,7 +13,7 @@ class RemoteDataSource private constructor(
     private val handler = Handler()
 
     companion object{
-        private const val SERVICE_LATENCY_IN_MILLIS : Long = 2000
+        private const val SERVICE_LATENCY_IN_MILLIS : Long = 3000
 
         @Volatile
         private var instance : RemoteDataSource? = null
