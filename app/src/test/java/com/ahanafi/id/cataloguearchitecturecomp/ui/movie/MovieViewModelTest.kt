@@ -7,11 +7,11 @@ import com.ahanafi.id.cataloguearchitecturecomp.data.Movie
 import com.ahanafi.id.cataloguearchitecturecomp.data.source.AppDataRepository
 import com.ahanafi.id.cataloguearchitecturecomp.utils.MovieDummy
 import com.nhaarman.mockitokotlin2.verify
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
-import org.junit.Test
-
-import org.junit.Assert.*
 import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`

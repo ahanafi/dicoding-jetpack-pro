@@ -5,14 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.ahanafi.id.cataloguearchitecturecomp.data.Movie
 import com.ahanafi.id.cataloguearchitecturecomp.data.source.AppDataRepository
-import com.ahanafi.id.cataloguearchitecturecomp.data.source.FakeAppDataRepository
 import com.ahanafi.id.cataloguearchitecturecomp.utils.MovieDummy
 import com.nhaarman.mockitokotlin2.verify
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
-import org.junit.Test
-
-import org.junit.Assert.*
 import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
@@ -23,7 +22,7 @@ class DetailMovieViewModelTest {
 
     private lateinit var viewModel: DetailMovieViewModel
     private val dummyMovie = MovieDummy.generateMovies()[0]
-    private val movieId = dummyMovie.id.toString()
+    private val movieId = dummyMovie.id
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -32,12 +31,11 @@ class DetailMovieViewModelTest {
     private lateinit var appDataRepository: AppDataRepository
 
     @Mock
-    private lateinit var observer: Observer<List<Movie>>
+    private lateinit var movieObserver: Observer<Movie>
 
     @Before
     fun setUp() {
         viewModel = DetailMovieViewModel(appDataRepository)
-        viewModel.setSelectedMovie(movieId)
     }
 
     @Test
@@ -45,9 +43,9 @@ class DetailMovieViewModelTest {
         val movie = MutableLiveData<Movie>()
         movie.value = dummyMovie
 
-        `when`(appDataRepository.getDetailMovie(movieId.toInt())).thenReturn(movie)
-        val movieData = viewModel.getMovie().value as Movie
-        verify(appDataRepository).getDetailMovie(movieId.toInt())
+        `when`(appDataRepository.getDetailMovie(movieId)).thenReturn(movie)
+        val movieData = viewModel.getMovie(movieId).value as Movie
+        verify(appDataRepository).getDetailMovie(movieId)
 
         assertNotNull(movieData)
         assertEquals(movieData.id, dummyMovie.id)
@@ -59,5 +57,7 @@ class DetailMovieViewModelTest {
         assertEquals(movieData.posterPath, dummyMovie.posterPath)
         assertEquals(movieData.backdropPath, dummyMovie.backdropPath)
 
+        viewModel.getMovie(movieId).observeForever(movieObserver)
+        verify(movieObserver).onChanged(dummyMovie)
     }
 }

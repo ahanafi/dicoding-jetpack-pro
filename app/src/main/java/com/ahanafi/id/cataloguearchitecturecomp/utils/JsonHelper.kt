@@ -1,15 +1,15 @@
 package com.ahanafi.id.cataloguearchitecturecomp.utils
 
 import android.content.Context
-import com.ahanafi.id.cataloguearchitecturecomp.data.source.remote.response.MovieResponse
-import com.ahanafi.id.cataloguearchitecturecomp.data.source.remote.response.TvShowResponse
+import com.ahanafi.id.cataloguearchitecturecomp.data.source.remote.network.response.MovieResponse
+import com.ahanafi.id.cataloguearchitecturecomp.data.source.remote.network.response.TvShowResponse
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
 class JsonHelper(private val context: Context) {
 
-    private fun parsingFileToString(fileName : String) : String? {
+    private fun parsingFileToString(fileName: String): String? {
         return try {
             val `is` = context.assets.open(fileName)
             val buffer = ByteArray(`is`.available())
@@ -22,10 +22,10 @@ class JsonHelper(private val context: Context) {
         }
     }
 
-    fun loadMovies() : List<MovieResponse> {
+    fun loadMovies(): List<MovieResponse> {
         val listMovie = ArrayList<MovieResponse>()
         try {
-            val movieJsonFile = parsingFileToString("data_movie.json").toString()
+            val movieJsonFile = parsingFileToString("movie.json").toString()
             val resultObject = JSONObject(movieJsonFile)
             val listDataMovie = resultObject.getJSONArray("results")
 
@@ -51,16 +51,16 @@ class JsonHelper(private val context: Context) {
         return listMovie
     }
 
-    fun loadTvShow() : List<TvShowResponse> {
+    fun loadTvShow(): List<TvShowResponse> {
         val listTvShow = ArrayList<TvShowResponse>()
         try {
-            val tvShowJsonFile = parsingFileToString("data_tv_show.json").toString()
+            val tvShowJsonFile = parsingFileToString("tvshow.json").toString()
             val resultObject = JSONObject(tvShowJsonFile)
             val listDataTvShow = resultObject.getJSONArray("results")
 
             for (i in 0 until listDataTvShow.length()) {
                 val movieData = listDataTvShow.getJSONObject(i)
-                val tvShowResponse= TvShowResponse()
+                val tvShowResponse = TvShowResponse()
 
                 tvShowResponse.id = movieData.getInt("id")
                 tvShowResponse.title = movieData.getString("name")

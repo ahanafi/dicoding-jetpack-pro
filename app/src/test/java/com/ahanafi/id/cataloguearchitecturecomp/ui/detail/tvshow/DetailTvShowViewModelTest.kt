@@ -2,15 +2,16 @@ package com.ahanafi.id.cataloguearchitecturecomp.ui.detail.tvshow
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import com.ahanafi.id.cataloguearchitecturecomp.utils.TvShowDummy
-import org.junit.Test
 import androidx.lifecycle.Observer
 import com.ahanafi.id.cataloguearchitecturecomp.data.TvShow
 import com.ahanafi.id.cataloguearchitecturecomp.data.source.AppDataRepository
+import com.ahanafi.id.cataloguearchitecturecomp.utils.TvShowDummy
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
@@ -35,16 +36,16 @@ class DetailTvShowViewModelTest {
     @Before
     fun setUp() {
         viewModel = DetailTvShowViewModel(appDataRepository)
-        viewModel.setSelectedTvShow(tvShowId.toString())
     }
 
     @Test
-    fun getMovie() {
+    fun getTvShow() {
         val tvShow = MutableLiveData<TvShow>()
         tvShow.value = dummyTvShow
-        `when`(appDataRepository.getDetailTvShow(tvShowId!!)).thenReturn(tvShow)
 
-        val tvShowData = viewModel.getTvShow().value as TvShow
+        `when`(appDataRepository.getDetailTvShow(tvShowId)).thenReturn(tvShow)
+
+        val tvShowData = viewModel.getTvShow(tvShowId).value as TvShow
         verify(appDataRepository).getDetailTvShow(tvShowId)
         assertNotNull(tvShow)
         assertEquals(tvShowData.id, dummyTvShow.id)
@@ -56,7 +57,7 @@ class DetailTvShowViewModelTest {
         assertEquals(tvShowData.posterPath, dummyTvShow.posterPath)
         assertEquals(tvShowData.backdropPath, dummyTvShow.backdropPath)
 
-        viewModel.getTvShow().observeForever(tvShowObserver)
+        viewModel.getTvShow(tvShowId).observeForever(tvShowObserver)
         verify(tvShowObserver).onChanged(dummyTvShow)
     }
 }

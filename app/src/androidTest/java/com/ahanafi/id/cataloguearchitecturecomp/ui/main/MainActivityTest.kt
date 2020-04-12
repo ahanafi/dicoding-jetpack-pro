@@ -6,9 +6,8 @@ import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
 import com.ahanafi.id.cataloguearchitecturecomp.R
 import com.ahanafi.id.cataloguearchitecturecomp.utils.EspressoIdlingResource
@@ -47,7 +46,12 @@ class MainActivityTest {
 
     @Test
     fun loadDetailMovie() {
-        onView(withId(R.id.rv_movie)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        onView(withId(R.id.rv_movie)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
+        )
         onView(withId(R.id.tv_title)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_title)).check(matches(withText(movieDummy[0].title)))
         onView(withId(R.id.tv_release_date)).check(matches(isDisplayed()))
@@ -71,16 +75,21 @@ class MainActivityTest {
     @Test
     fun loadDetailTvShow() {
         onView(withText("Tv Show")).perform(click())
-        onView(withId(R.id.rv_tv_show)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        onView(withId(R.id.rv_tv_show)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                2,
+                click()
+            )
+        )
         onView(withId(R.id.tv_title)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_title)).check(matches(withText(tvShowDummy[0].title)))
+        onView(withId(R.id.tv_title)).check(matches(withText(tvShowDummy[2].title)))
         onView(withId(R.id.tv_release_date)).check(matches(isDisplayed()))
-        //onView(withId(R.id.tv_release_date)).check(matches(withText(tvShowDummy[0].releaseDate)))
+        onView(withId(R.id.tv_release_date)).check(matches(withText(tvShowDummy[2].releaseDate)))
         onView(withId(R.id.tv_overview)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_overview))
             .perform(scrollTo())
             .check(matches(isDisplayed()))
-        //onView(withId(R.id.tv_overview)).check(matches(withText(tvShowDummy[0].overview)))
+        onView(withId(R.id.tv_overview)).check(matches(withText(tvShowDummy[2].overview)))
     }
 
     @Test

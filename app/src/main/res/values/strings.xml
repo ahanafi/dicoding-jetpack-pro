@@ -10,4 +10,15 @@
     <string name="overview">this is ane example of overview text bla bla bla bla bla bla bla bla</string>
     <string name="overview_text">Overview</string>
     <string name="text_vote">999</string>
+    <string name="text_date">YYYY-MM-DD</string>
+    <string name="add_to_favorite">Add to Favorite</string>
+    <string name="title_movie">Movies</string>
+    <string name="title_tv_show">Tv Shows</string>
+    <string name="title_favorite">My Favorites</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_movies">Movies</string>
+    <string name="text_tvshow">Tv Shows</string>
+    <string name="text_favorite">My Favorite</string>
 </resources>

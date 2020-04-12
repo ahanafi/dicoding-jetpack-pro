@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ahanafi.id.cataloguearchitecturecomp.R
 import com.ahanafi.id.cataloguearchitecturecomp.data.TvShow
 import com.ahanafi.id.cataloguearchitecturecomp.ui.detail.tvshow.DetailTvShowActivity
-import com.ahanafi.id.cataloguearchitecturecomp.ui.detail.tvshow.DetailTvShowViewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.items_data.view.*
@@ -16,14 +15,14 @@ import kotlinx.android.synthetic.main.items_data.view.*
 class TvShowAdapter : RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
     class TvShowViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        internal fun bind(tvShow : TvShow) {
+        internal fun bind(tvShow: TvShow) {
             with(itemView) {
                 tv_item_name.text = tvShow.title
                 tv_item_release.text = tvShow.releaseDate
                 tv_description.text = tvShow.overview
-                setOnClickListener{
+                setOnClickListener {
                     val intent = Intent(context, DetailTvShowActivity::class.java).apply {
-                        putExtra(DetailTvShowActivity.EXTRA_TV_SHOW_ID, tvShow.id.toString())
+                        putExtra(DetailTvShowActivity.EXTRA_TV_SHOW_ID, tvShow.id)
                     }
                     context.startActivity(intent)
                 }
@@ -38,8 +37,8 @@ class TvShowAdapter : RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
 
     private val listTvShow = ArrayList<TvShow>()
 
-    fun setTvShow(tvShow: List<TvShow>?){
-        if(tvShow == null) return
+    fun setTvShow(tvShow: List<TvShow>?) {
+        if (tvShow == null) return
         listTvShow.clear()
         listTvShow.addAll(tvShow)
     }

@@ -1,98 +1,59 @@
 package com.ahanafi.id.cataloguearchitecturecomp.data.source
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.ahanafi.id.cataloguearchitecturecomp.data.Movie
-import com.ahanafi.id.cataloguearchitecturecomp.data.TvShow
-import com.ahanafi.id.cataloguearchitecturecomp.data.source.remote.RemoteDataSource
-import com.ahanafi.id.cataloguearchitecturecomp.data.source.remote.response.MovieResponse
-import com.ahanafi.id.cataloguearchitecturecomp.data.source.remote.response.TvShowResponse
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
+import com.ahanafi.id.cataloguearchitecturecomp.data.source.local.LocalDataRepository
+import com.ahanafi.id.cataloguearchitecturecomp.data.source.remote.ApiResponse
+import com.ahanafi.id.cataloguearchitecturecomp.data.source.remote.RemoteDataRepository
+import com.ahanafi.id.cataloguearchitecturecomp.data.source.remote.network.TMDBApiService
+import com.ahanafi.id.cataloguearchitecturecomp.data.source.remote.network.response.ResponseData
+import com.ahanafi.id.cataloguearchitecturecomp.data.source.remote.network.response.ResultData
+import com.ahanafi.id.cataloguearchitecturecomp.utils.AppExecutors
+import com.ahanafi.id.cataloguearchitecturecomp.vo.Resource
 
-class AppDataRepository private constructor(
-    private val remoteDataSource: RemoteDataSource
+class AppDataRepository(
+    private val remoteDataRepository: RemoteDataRepository,
+    private val localDataRepository: LocalDataRepository
 ) : AppDataSource {
-    companion object{
+
+    companion object {
         @Volatile
-        private var instance : AppDataRepository? = null
+        private var instance: AppDataRepository? = null
 
-        fun getInstance(remoteDataSource: RemoteDataSource) : AppDataRepository = instance ?: synchronized(this){
-            instance ?: AppDataRepository(remoteDataSource)
-        }
-    }
-    override fun getAllMovies(): LiveData<List<Movie>> {
-        val movieResult = MutableLiveData<List<Movie>>()
-        remoteDataSource.getAllMovies(object : RemoteDataSource.LoadMoviesCallback {
-            override fun onAllMoviesReceived(movieResponse: List<MovieResponse>) {
-                val movieList = ArrayList<Movie>()
-                for (response in movieResponse) {
-                    val movie = Movie(
-                        response.id, response.title, response.releaseDate, response.overview,
-                        response.backdropPath,response.posterPath, response.voteCount, response.language
-                    )
-                    movieList.add(movie)
-                }
-                movieResult.postValue(movieList)
+        fun getInstance(
+            remoteData : RemoteDataRepository,
+            localData : LocalDataRepository
+        ): AppDataRepository =
+            instance ?: synchronized(this) {
+                instance ?: AppDataRepository(
+                    remoteData, localData
+                )
             }
-        })
-
-        return movieResult
     }
 
-    override fun getDetailMovie(movieId : Int): LiveData<Movie> {
-        val movieResult = MutableLiveData<Movie>()
-        remoteDataSource.getAllMovies(object : RemoteDataSource.LoadMoviesCallback{
-            override fun onAllMoviesReceived(movieResponse: List<MovieResponse>) {
-                lateinit var movie : Movie
-                for(response in movieResponse) {
-                    if(movieId == response.id) {
-                        movie = Movie(
-                            response.id, response.title, response.releaseDate, response.overview,
-                            response.backdropPath,response.posterPath, response.voteCount, response.language
-                        )
-                        movieResult.postValue(movie)
-                        break
-                    }
-                }
-            }
-        })
-        return movieResult
+    override fun getAllMovies(): LiveData<PagedList<ResultData>> = remoteDataRepository.getAllMovies()
+
+    override fun getDetailMovie(movieId: Int?): LiveData<ResultData> {
+        TODO("Not yet implemented")
     }
 
-    override fun getAllTvShows(): LiveData<List<TvShow>> {
-        val tvShowResult = MutableLiveData<List<TvShow>>()
-        remoteDataSource.getAllTvShows(object : RemoteDataSource.LoadTvShowsCallback {
-            override fun onAllTvShowsReceived(tvShowResponse: List<TvShowResponse>) {
-                val tvShowList = ArrayList<TvShow>()
-                for (response in tvShowResponse) {
-                    val tvShow = TvShow(
-                        response.id, response.title, response.releaseDate, response.overview,
-                        response.backdropPath,response.posterPath, response.voteCount, response.language
-                    )
-                    tvShowList.add(tvShow)
-                }
-                tvShowResult.postValue(tvShowList)
-            }
-        })
+    override fun getAllTvShows(): LiveData<PagedList<ResultData>> =
+        remoteDataRepository.getAllTvShows()
 
-        return tvShowResult
+    override fun getDetailTvShow(tvShowId: Int?): LiveData<ResultData> {
+        TODO("Not yet implemented")
     }
 
-    override fun getDetailTvShow(tvShowId : Int): LiveData<TvShow> {
-        val tvShowResult = MutableLiveData<TvShow>()
-        remoteDataSource.getAllTvShows(object : RemoteDataSource.LoadTvShowsCallback {
-            override fun onAllTvShowsReceived(tvShowResponse: List<TvShowResponse>) {
-                lateinit var tvShow : TvShow
-                for (response in tvShowResponse) {
-                    tvShow = TvShow(
-                        response.id, response.title, response.releaseDate, response.overview,
-                        response.backdropPath,response.posterPath, response.voteCount, response.language
-                    )
-                    tvShowResult.postValue(tvShow)
-                    break
-                }
-            }
-        })
+    override fun addToFavorite(data: ResultData) = localDataRepository.addToFavorite(data)
 
-        return tvShowResult
-    }
+    override fun removeFromFavorite(data: ResultData) = localDataRepository.removeFromFavorite(data)
+
+    override fun getFavoriteMovies(): DataSource.Factory<Int, ResultData> =
+        localDataRepository.getFavoriteMovies()
+
+    override fun getFavoriteTvShows(): DataSource.Factory<Int, ResultData> =
+        localDataRepository.getFavoriteTvShows()
+
 }

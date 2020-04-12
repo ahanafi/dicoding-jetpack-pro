@@ -1,24 +1,23 @@
 package com.ahanafi.id.cataloguearchitecturecomp.data.source.remote
 
 import android.os.Handler
-import com.ahanafi.id.cataloguearchitecturecomp.data.Movie
-import com.ahanafi.id.cataloguearchitecturecomp.data.source.remote.response.MovieResponse
-import com.ahanafi.id.cataloguearchitecturecomp.data.source.remote.response.TvShowResponse
+import com.ahanafi.id.cataloguearchitecturecomp.data.source.remote.network.response.MovieResponse
+import com.ahanafi.id.cataloguearchitecturecomp.data.source.remote.network.response.TvShowResponse
 import com.ahanafi.id.cataloguearchitecturecomp.utils.EspressoIdlingResource
 import com.ahanafi.id.cataloguearchitecturecomp.utils.JsonHelper
 
 class RemoteDataSource private constructor(
     private val jsonHelper: JsonHelper
-){
+) {
     private val handler = Handler()
 
-    companion object{
-        private const val SERVICE_LATENCY_IN_MILLIS : Long = 3000
+    companion object {
+        private const val SERVICE_LATENCY_IN_MILLIS: Long = 1000
 
         @Volatile
-        private var instance : RemoteDataSource? = null
+        private var instance: RemoteDataSource? = null
 
-        fun getInstance(helper: JsonHelper) : RemoteDataSource = instance ?: synchronized(this){
+        fun getInstance(helper: JsonHelper): RemoteDataSource = instance ?: synchronized(this) {
             instance ?: RemoteDataSource(helper)
         }
     }

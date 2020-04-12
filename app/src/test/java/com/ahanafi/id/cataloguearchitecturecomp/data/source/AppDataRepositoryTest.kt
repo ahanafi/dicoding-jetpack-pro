@@ -8,10 +8,10 @@ import com.ahanafi.id.cataloguearchitecturecomp.utils.TvShowDummy
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Test
-
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Rule
+import org.junit.Test
 import org.mockito.Mockito
 
 class AppDataRepositoryTest {
